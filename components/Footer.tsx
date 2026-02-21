@@ -1,4 +1,22 @@
 import { FaFacebookF, FaLinkedinIn, FaEnvelope } from "react-icons/fa";
+import { IconType } from "react-icons"
+
+
+type SocialIconProps = {
+  href: string
+  Icon: IconType
+}
+
+type FooterLink = {
+  label: string
+  href: string
+  external?: boolean
+}
+
+type FooterLinksProps = {
+  title: string
+  links: FooterLink[]
+}
 
 export default function Footer() {
   return (
@@ -79,7 +97,7 @@ export default function Footer() {
   );
 }
 
-function SocialIcon({ href, Icon }) {
+function SocialIcon({ href, Icon }: SocialIconProps) {
   return (
     <a
       href={href}
@@ -89,15 +107,15 @@ function SocialIcon({ href, Icon }) {
     >
       <Icon className="text-[#0E1641] w-4 h-4" />
     </a>
-  );
+  )
 }
 
-function FooterLinks({ title, links }) {
+function FooterLinks({ title, links }: FooterLinksProps) {
   return (
     <div className="min-w-[120px]">
       <h3 className="font-bold text-gray-300 mb-3">{title}</h3>
       <ul className="flex flex-col gap-2">
-        {links.map((link, i) => (
+        {links.map((link: FooterLink, i: number) => (
           <li key={i}>
             <a
               href={link.href}
@@ -110,5 +128,5 @@ function FooterLinks({ title, links }) {
         ))}
       </ul>
     </div>
-  );
+  )
 }

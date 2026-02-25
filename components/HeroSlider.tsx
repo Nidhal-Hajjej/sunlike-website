@@ -17,9 +17,9 @@ export default function HeroSlider() {
   ]
 
   return (
-    <section id="home" className="relative h-screen w-full overflow-hidden">
+    <section id="home" className="relative h-[100svh] w-full overflow-hidden">
 
-      {/* Slider */}
+      {/* Swiper Slider */}
       <Swiper
         modules={[Autoplay, EffectFade]}
         effect="fade"
@@ -28,36 +28,25 @@ export default function HeroSlider() {
           disableOnInteraction: false,
         }}
         loop
+        speed={1200}
         className="h-full w-full"
       >
         {images.map((src, index) => (
           <SwiperSlide key={index}>
             <div
-              className="h-full w-full bg-cover bg-center scale-105"
+              className="h-full w-full bg-cover bg-center"
               style={{ backgroundImage: `url(${src})` }}
             />
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* Overlay radial (conservé tel quel) */}
-      <div
-        className="absolute inset-0 z-10"
-        style={{
-          background: `
-            radial-gradient(
-              circle at 100% 0%,
-              rgba(0,0,0,0.2) 0%,
-              rgba(0,0,0,0.3) 25%,
-              rgba(0,0,0,0.9) 70%
-            )
-          `,
-        }}
-      />
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 z-10 bg-black/60" />
 
       {/* Content */}
       <div className="absolute inset-0 z-20 flex items-center">
-        <div className="max-w-7xl mx-auto px-10 w-full">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 w-full">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -66,13 +55,13 @@ export default function HeroSlider() {
           >
             {/* Badge */}
             <div className="mb-6">
-              <span className="px-4 py-1.5 text-sm uppercase tracking-widest bg-white/10 backdrop-blur-md text-green-400 border border-white/20 rounded-full">
-                Renewable Energy & Industrial Services
+              <span className="px-4 py-1.5 text-xs md:text-sm uppercase tracking-widest bg-white/10 backdrop-blur-md text-green-400 border border-white/20 rounded-full">
+                Renewable Energy Services
               </span>
             </div>
 
             {/* Title */}
-            <h1 className="text-white text-5xl md:text-7xl font-bold leading-[1.1]">
+            <h1 className="text-white text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
               Powering Progress.
               <br />
               <span className="bg-gradient-to-r from-green-400 to-cyan-400 bg-clip-text text-transparent">
@@ -81,28 +70,29 @@ export default function HeroSlider() {
             </h1>
 
             {/* Description */}
-            <p className="mt-8 text-lg md:text-xl text-slate-300 leading-relaxed max-w-2xl">
+            <p className="mt-6 md:mt-8 text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed max-w-2xl">
               Sunlike South Services delivers reliable renewable energy,
-              infrastructure and industrial solutions with uncompromising
+              infrastructure and industrial solutions with uncompising
               standards of safety, performance and sustainability.
             </p>
 
             {/* CTA Buttons */}
-            <div className="mt-12 flex flex-wrap gap-6">
+            <div className="mt-8 md:mt-12 flex flex-col sm:flex-row gap-4 sm:gap-6">
               <a
                 href="#quote"
-                className="bg-gradient-to-r from-green-400 to-cyan-400 hover:bg-white/10 text-white px-8 py-4 rounded-lg font-semibold transition shadow-lg shadow-green-900/40"
+                className="bg-gradient-to-r from-green-400 to-cyan-400 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold transition hover:opacity-90 text-center"
               >
                 Get a Quote
               </a>
 
               <a
                 href="#projects"
-                className="border border-white/30 text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition backdrop-blur-md"
+                className="border border-white/30 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold hover:bg-white/10 transition backdrop-blur-md text-center"
               >
                 Explore Our Projects
               </a>
             </div>
+
           </motion.div>
         </div>
       </div>

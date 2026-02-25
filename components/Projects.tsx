@@ -138,10 +138,6 @@ export default function ProjectsSection() {
                       {project.description}
                     </p>
 
-                    <button className="text-sm border-b border-yellow-400 text-yellow-400 hover:text-white transition">
-                      Explore
-                    </button>
-
                   </div>
 
                 </div>

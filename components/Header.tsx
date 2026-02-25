@@ -2,44 +2,42 @@
 
 import Image from "next/image"
 import { useEffect, useState } from "react"
+import { Menu, X } from "lucide-react"
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const [openMenu, setOpenMenu] = useState<string | null>(null)
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 30)
     }
-
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   return (
     <header
-      className={`
-        fixed top-0 w-full z-50 transition-all duration-500
-        ${
-          scrolled
-            ? "bg-white/80 backdrop-blur-xl shadow-md border-b border-slate-200"
-            : "bg-transparent"
-        }
-      `}
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
+        scrolled
+          ? "bg-white/90 backdrop-blur-xl shadow-md border-b border-slate-200"
+          : "bg-transparent"
+      }`}
     >
-      <nav className="max-w-7xl mx-auto px-12 py-4 flex items-center justify-between">
+      <nav className="max-w-7xl mx-auto px-4 md:px-10 py-4 flex items-center justify-between">
 
-        {/* LEFT : LOGO + TITLE */}
-        <a href="#home" className="flex items-center gap-3">
+        {/* LOGO */}
+        <a href="#home" className="flex items-center gap-2">
           <Image
             src="/images/sunlike-white.png"
             alt="Sunlike South Services"
-            width={110}
-            height={55}
+            width={100}
+            height={50}
             className={scrolled ? "" : "brightness-0 invert"}
           />
           <span
-            className={`font-semibold tracking-wide transition ${
+            className={`hidden sm:block font-semibold transition ${
               scrolled ? "text-slate-900" : "text-white"
             }`}
           >
@@ -47,152 +45,81 @@ export default function Header() {
           </span>
         </a>
 
-        {/* CENTER MENU */}
-        <div className="flex items-center gap-24">
+        {/* DESKTOP MENU */}
+        <div className="hidden md:flex items-center gap-12">
 
-          <NavLink href="#home" scrolled={scrolled}>
-            Home
-          </NavLink>
+          <NavLink href="#home" scrolled={scrolled}>Home</NavLink>
 
-          <Dropdown
-            label="Company"
-            id="company"
-            scrolled={scrolled}
-            openMenu={openMenu}
-            setOpenMenu={setOpenMenu}
-            items={[
-              { label: "About Us", href: "#about" },
-              { label: "Vision", href: "#vision" },
-            ]}
-          />
+          <NavLink href="#about" scrolled={scrolled}>About</NavLink>
 
-          <Dropdown
-            label="Expertise"
-            id="expertise"
-            scrolled={scrolled}
-            openMenu={openMenu}
-            setOpenMenu={setOpenMenu}
-            items={[
-              { label: "Projects", href: "#projects" },
-              { label: "HSE & Guarantee", href: "#hse" },
-            ]}
-          />
-        </div>
+          <NavLink href="#projects" scrolled={scrolled}>Projects</NavLink>
 
-        {/* RIGHT : CTA */}
-        <a
-          href="#quote"
-          className={`
-            px-6 py-2.5 rounded-full font-semibold transition-all duration-300
-            ${
+          <a
+            href="#quote"
+            className={`px-5 py-2 rounded-full font-semibold transition ${
               scrolled
                 ? "bg-[#0E1641] text-white hover:bg-[#1c2766]"
                 : "bg-white/20 text-white backdrop-blur-md hover:bg-white/30"
-            }
-          `}
-        >
-          Get a Quote
-        </a>
+            }`}
+          >
+            Get a Quote
+          </a>
+        </div>
 
+        {/* MOBILE BUTTON */}
+        <button
+          className="md:hidden"
+          onClick={() => setMobileOpen(!mobileOpen)}
+        >
+          {mobileOpen ? (
+            <X className={scrolled ? "text-slate-900" : "text-white"} />
+          ) : (
+            <Menu className={scrolled ? "text-slate-900" : "text-white"} />
+          )}
+        </button>
       </nav>
 
-      {/* Bottom animated bar */}
+      {/* MOBILE MENU */}
+      {mobileOpen && (
+        <div className="md:hidden bg-white shadow-lg px-6 py-6 space-y-4">
+          <a href="#home" className="block text-slate-800">Home</a>
+          <a href="#about" className="block text-slate-800">About</a>
+          <a href="#projects" className="block text-slate-800">Projects</a>
+          <a
+            href="#quote"
+            className="block bg-[#0E1641] text-white text-center py-2 rounded-full"
+          >
+            Get a Quote
+          </a>
+        </div>
+      )}
+
+      {/* Bottom bar */}
       <div
-        className={`
-          absolute bottom-0 left-0 h-[2px] bg-[#2AB0FF]
-          transition-all duration-500
-          ${scrolled ? "w-full opacity-100" : "w-0 opacity-0"}
-        `}
+        className={`absolute bottom-0 left-0 h-[2px] bg-[#2AB0FF] transition-all duration-500 ${
+          scrolled ? "w-full opacity-100" : "w-0 opacity-0"
+        }`}
       />
     </header>
   )
 }
 
-/* NAV LINK */
-
-function NavLink({
-  href,
-  children,
-  scrolled,
-}: {
+type NavLinkProps = {
   href: string
   children: React.ReactNode
   scrolled: boolean
-}) {
+}
+
+function NavLink({ href, children, scrolled }: NavLinkProps) {
   return (
     <a
       href={href}
-      className={`
-        relative font-medium tracking-wide transition duration-300 group
-        ${scrolled ? "text-slate-900" : "text-white"}
-      `}
+      className={`relative font-medium transition group ${
+        scrolled ? "text-slate-900" : "text-white"
+      }`}
     >
       {children}
       <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-[#2AB0FF] transition-all duration-300 group-hover:w-full" />
     </a>
-  )
-}
-
-/* DROPDOWN */
-
-function Dropdown({
-  label,
-  items,
-  scrolled,
-  openMenu,
-  setOpenMenu,
-  id,
-}: {
-  label: string
-  items: { label: string; href: string }[]
-  scrolled: boolean
-  openMenu: string | null
-  setOpenMenu: (id: string | null) => void
-  id: string
-}) {
-  const isOpen = openMenu === id
-
-  return (
-    <div
-      className="relative"
-      onMouseEnter={() => setOpenMenu(id)}
-      onMouseLeave={() => setOpenMenu(null)}
-    >
-      <button
-        className={`
-          relative font-medium tracking-wide transition duration-300 group
-          ${scrolled ? "text-slate-900" : "text-white"}
-        `}
-      >
-        {label}
-        <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-[#2AB0FF] transition-all duration-300 group-hover:w-full" />
-      </button>
-
-      <div
-        className={`
-          absolute left-1/2 -translate-x-1/2 top-full mt-2
-          bg-white border border-slate-200 rounded-xl shadow-xl
-          min-w-[220px] py-3
-          transition-all duration-200
-          z-50
-          ${
-            isOpen
-              ? "opacity-100 visible translate-y-0"
-              : "opacity-0 invisible -translate-y-2"
-          }
-        `}
-      >
-
-        {items.map((item, index) => (
-          <a
-            key={index}
-            href={item.href}
-            className="block px-6 py-2 text-slate-700 hover:bg-slate-100 transition"
-          >
-            {item.label}
-          </a>
-        ))}
-      </div>
-    </div>
   )
 }

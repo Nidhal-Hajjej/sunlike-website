@@ -1,5 +1,12 @@
 import { ShieldCheck, HardHat, Award, Leaf } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import SectionTitle from "./SectionTitle";
+
+type FeatureCardProps = {
+  Icon: LucideIcon;
+  title: string;
+  text: string;
+};
 
 export default function HSESection() {
   return (
@@ -58,7 +65,7 @@ export default function HSESection() {
   );
 }
 
-function FeatureCard({ Icon, title, text }) {
+function FeatureCard({ Icon, title, text }: FeatureCardProps) {
   return (
     <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 group border border-blue-50">
       

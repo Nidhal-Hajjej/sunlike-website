@@ -43,7 +43,7 @@ const projects = [
 
 export default function ProjectsSection() {
   return (
-    <section id="projects" className="relative bg-blue-50 py-28 px-8 lg:px-16 overflow-hidden">
+    <section id="projects" className="relative bg-blue-50 py-28 px-8 lg:px-16 overflow-hidden ">
 
       {/* SECTION HEADER
       <motion.div

@@ -2,12 +2,11 @@
 
 import Image from "next/image"
 import { useEffect, useState } from "react"
-import { Menu, X } from "lucide-react"
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
   const [openMenu, setOpenMenu] = useState<string | null>(null)
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,109 +16,204 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  const closeMobile = () => setMobileOpen(false)
+
   return (
-    <header
-      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-        scrolled
-          ? "bg-white/90 backdrop-blur-xl shadow-md border-b border-slate-200"
-          : "bg-transparent"
-      }`}
-    >
-      <nav className="max-w-7xl mx-auto px-4 md:px-10 py-4 flex items-center justify-between">
+    <>
+      {/* ================= HEADER ================= */}
+      <header
+        className={`
+          fixed top-0 left-0 w-full z-[9999]
+          transition-all duration-500
+          ${
+            scrolled
+              ? "bg-white/80 backdrop-blur-xl shadow-md border-b border-slate-200"
+              : "bg-transparent"
+          }
+        `}
+      >
+        <nav className="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
 
-        {/* LOGO */}
-        <a href="#home" className="flex items-center gap-2">
-          <Image
-            src="/images/sunlike-white.png"
-            alt="Sunlike South Services"
-            width={100}
-            height={50}
-            className={scrolled ? "" : "brightness-0 invert"}
-          />
-          <span
-            className={`hidden sm:block font-semibold transition ${
-              scrolled ? "text-slate-900" : "text-white"
-            }`}
-          >
-            Sunlike South Services
-          </span>
-        </a>
+          {/* LOGO */}
+          <a href="#home" className="flex items-center gap-3">
+            <Image
+              src="/images/sunlike-white.png"
+              alt="Sunlike South Services"
+              width={110}
+              height={55}
+              className={scrolled ? "" : "brightness-0 invert"}
+            />
+            <span
+              className={`font-semibold tracking-wide transition hidden sm:block ${
+                scrolled ? "text-slate-900" : "text-white"
+              }`}
+            >
+              Sunlike South Services
+            </span>
+          </a>
 
-        {/* DESKTOP MENU */}
-        <div className="hidden md:flex items-center gap-12">
+          {/* ================= DESKTOP MENU ================= */}
+          <div className="hidden md:flex items-center gap-24">
 
-          <NavLink href="#home" scrolled={scrolled}>Home</NavLink>
+            <NavLink href="#home" scrolled={scrolled}>Home</NavLink>
 
-          <NavLink href="#about" scrolled={scrolled}>About</NavLink>
+            <Dropdown
+              label="Company"
+              id="company"
+              scrolled={scrolled}
+              openMenu={openMenu}
+              setOpenMenu={setOpenMenu}
+              items={[
+                { label: "About Us", href: "#about" },
+                { label: "Vision", href: "#vision" },
+              ]}
+            />
 
-          <NavLink href="#projects" scrolled={scrolled}>Projects</NavLink>
+            <Dropdown
+              label="Expertise"
+              id="expertise"
+              scrolled={scrolled}
+              openMenu={openMenu}
+              setOpenMenu={setOpenMenu}
+              items={[
+                { label: "Projects", href: "#projects" },
+                { label: "HSE & Guarantee", href: "#hse" },
+              ]}
+            />
+          </div>
 
+          {/* DESKTOP CTA */}
           <a
             href="#quote"
-            className={`px-5 py-2 rounded-full font-semibold transition ${
-              scrolled
-                ? "bg-[#0E1641] text-white hover:bg-[#1c2766]"
-                : "bg-white/20 text-white backdrop-blur-md hover:bg-white/30"
-            }`}
+            className={`
+              hidden md:block
+              px-6 py-2.5 rounded-full font-semibold transition-all duration-300
+              ${
+                scrolled
+                  ? "bg-[#0E1641] text-white hover:bg-[#1c2766]"
+                  : "bg-white/20 text-white backdrop-blur-md hover:bg-white/30"
+              }
+            `}
           >
             Get a Quote
           </a>
-        </div>
 
-        {/* MOBILE BUTTON */}
-        <button
-          className="md:hidden"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          {mobileOpen ? (
-            <X className={scrolled ? "text-slate-900" : "text-white"} />
-          ) : (
-            <Menu className={scrolled ? "text-slate-900" : "text-white"} />
-          )}
-        </button>
-      </nav>
-
-      {/* MOBILE MENU */}
-      {mobileOpen && (
-        <div className="md:hidden bg-white shadow-lg px-6 py-6 space-y-4">
-          <a href="#home" className="block text-slate-800">Home</a>
-          <a href="#about" className="block text-slate-800">About</a>
-          <a href="#projects" className="block text-slate-800">Projects</a>
-          <a
-            href="#quote"
-            className="block bg-[#0E1641] text-white text-center py-2 rounded-full"
+          {/* ================= MOBILE BURGER ================= */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="md:hidden z-50 flex flex-col gap-1"
           >
-            Get a Quote
-          </a>
-        </div>
-      )}
+            <span className="w-6 h-[2px] bg-white"></span>
+            <span className="w-6 h-[2px] bg-white"></span>
+            <span className="w-6 h-[2px] bg-white"></span>
+          </button>
+        </nav>
+      </header>
 
-      {/* Bottom bar */}
-      <div
-        className={`absolute bottom-0 left-0 h-[2px] bg-[#2AB0FF] transition-all duration-500 ${
-          scrolled ? "w-full opacity-100" : "w-0 opacity-0"
-        }`}
-      />
-    </header>
+      {/* ================= MOBILE FULLSCREEN MENU ================= */}
+      <MobileMenu isOpen={mobileOpen} close={closeMobile} />
+    </>
   )
 }
 
-type NavLinkProps = {
-  href: string
-  children: React.ReactNode
-  scrolled: boolean
-}
-
-function NavLink({ href, children, scrolled }: NavLinkProps) {
+/* ================= NAV LINK ================= */
+function NavLink({ href, children, scrolled }: { href: string; children: React.ReactNode; scrolled: boolean }) {
   return (
     <a
       href={href}
-      className={`relative font-medium transition group ${
-        scrolled ? "text-slate-900" : "text-white"
-      }`}
+      className={`
+        relative font-medium tracking-wide text-lg transition duration-300 group
+        ${scrolled ? "text-slate-900" : "text-white"}
+      `}
     >
       {children}
       <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-[#2AB0FF] transition-all duration-300 group-hover:w-full" />
     </a>
+  )
+}
+
+/* ================= DROPDOWN (DESKTOP ONLY) ================= */
+function Dropdown({
+  label,
+  items,
+  scrolled,
+  openMenu,
+  setOpenMenu,
+  id,
+}: {
+  label: string
+  items: { label: string; href: string }[]
+  scrolled: boolean
+  openMenu: string | null
+  setOpenMenu: (id: string | null) => void
+  id: string
+}) {
+  const isOpen = openMenu === id
+  return (
+    <div className="relative" onMouseEnter={() => setOpenMenu(id)} onMouseLeave={() => setOpenMenu(null)}>
+      <button
+        className={`
+          relative font-medium tracking-wide transition duration-300 group
+          ${scrolled ? "text-slate-900" : "text-white"}
+        `}
+      >
+        {label}
+        <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-[#2AB0FF] transition-all duration-300 group-hover:w-full" />
+      </button>
+
+      <div
+        className={`
+          absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2
+          bg-white border border-slate-200 rounded-xl shadow-xl
+          min-w-[220px] py-3
+          transition-all duration-200 z-[9999]
+          ${isOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"}
+        `}
+      >
+        {items.map((item, index) => (
+          <a key={index} href={item.href} className="block px-6 py-2 text-slate-700 hover:bg-slate-100 transition">
+            {item.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ================= MOBILE MENU COMPONENT ================= */
+function MobileMenu({ isOpen, close }: { isOpen: boolean; close: () => void }) {
+  return (
+    <div
+      className={`
+        fixed inset-0 z-[9998] md:hidden transition-all duration-500
+        ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
+      `}
+    >
+      {/* Background overlay */}
+      <div className="absolute inset-0 bg-[#0E1641]/95 backdrop-blur-xl" onClick={close} />
+
+      {/* Links */}
+      <div className="relative flex flex-col justify-center items-center h-full gap-10">
+        {[
+          { label: "Home", href: "#home" },
+          { label: "About Us", href: "#about" },
+          { label: "Vision", href: "#vision" },
+          { label: "Projects", href: "#projects" },
+          { label: "HSE & Guarantee", href: "#hse" },
+        ].map((item, i) => (
+          <NavLink key={i} href={item.href} scrolled={false}>
+            <span onClick={close}>{item.label}</span>
+          </NavLink>
+        ))}
+
+        <a
+          href="#quote"
+          onClick={close}
+          className="mt-6 px-8 py-3 rounded-full bg-white text-[#0E1641] font-semibold transition hover:scale-105"
+        >
+          Get a Quote
+        </a>
+      </div>
+    </div>
   )
 }

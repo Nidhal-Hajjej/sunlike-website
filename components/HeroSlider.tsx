@@ -61,11 +61,11 @@ export default function HeroSlider() {
             </div>
 
             {/* Title */}
-            <h1 className="text-white text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
-              Powering Progress.
+            <h1 className="text-white text-3xl sm:text-3xl md:text-5xl lg:text-6xl font-bold leading-tight">
+              Powering The Progress
               <br />
               <span className="bg-gradient-to-r from-green-400 to-cyan-400 bg-clip-text text-transparent">
-                Sustaining the Future.
+                Of A Greener Tunisia.
               </span>
             </h1>
 
